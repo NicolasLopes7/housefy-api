@@ -1,0 +1,36 @@
+{
+  "name": "housefy",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^17.0.39",
+    "graphql-fields": "^2.0.3",
+    "nodemon": "^2.0.16",
+    "prisma": "^3.14.0",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.8.1",
+    "tsconfig-paths": "^4.0.0",
+    "typegraphql-prisma": "^0.20.3",
+    "typescript": "^4.7.3"
+  },
+  "dependencies": {
+    "@prisma/client": "3.14.0",
+    "apollo-server": "^3.8.2",
+    "class-validator": "^0.13.2",
+    "graphql": "^15.3.0",
+    "reflect-metadata": "^0.1.13",
+    "type-graphql": "^1.1.1"
+  },
+  "scripts": {
+    "build": "yarn rimraf ./build && yarn tsc",
+    "start": "yarn ./build/index.js",
+    "dev": "nodemon",
+    "format": "eslint src/**/*.ts"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn format"
+    }
+  }
+}

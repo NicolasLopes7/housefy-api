@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator typegraphql {
+  provider = "typegraphql-prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int                    @id @default(autoincrement())
+  name       String
+  username   String                 @unique
+  password   String
+  assignees  TransactionAssignee[]
+  operations TransactionOperation[]
+  createdAt  DateTime               @default(now())
+  updatedAt  DateTime               @updatedAt
+}
+
+model Transaction {
+  id               Int                    @id @default(autoincrement())
+  name             String
+  description      String
+  metadata         TransactionMetadata[]
+  type             TransactionType
+  amount           Int
+  isRecurrent      Boolean                @default(false)
+  recurrencyPeriod Int?
+  status           TransactionStatus
+  dueDate          DateTime?
+  assignees        TransactionAssignee[]
+  operations       TransactionOperation[]
+}
+
+model TransactionOperation {
+  id            Int         @id @default(autoincrement())
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  transactionId Int
+  user          User        @relation(fields: [userId], references: [id])
+  userId        Int
+  amount        Int
+  createdAt     DateTime
+}
+
+model TransactionAssignee {
+  id            Int         @id @default(autoincrement())
+  User          User        @relation(fields: [userId], references: [id])
+  userId        Int
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  transactionId Int
+
+  @@unique([userId, transactionId])
+}
+
+model TransactionMetadata {
+  id            Int                     @id @default(autoincrement())
+  Transaction   Transaction             @relation(fields: [transactionId], references: [id])
+  transactionId Int
+  key           String
+  type          TransactionMetadataType
+  value         String
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum TransactionMetadataType {
+  STRING
+  NUMBER
+  IMAGE
+  BOOLEAN
+}
+
+enum TransactionStatus {
+  PENDING
+  PAID
+  CANCELLED
+  OVERDUE
+}
