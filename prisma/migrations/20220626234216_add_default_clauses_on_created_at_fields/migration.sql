@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "TransactionAssignee" ADD COLUMN     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "TransactionOperation" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP;
